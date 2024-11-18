@@ -1,4 +1,4 @@
-FROM maven:3.8.4-openjdk-17
+FROM maven:3.9.9-eclipse-temurin-21-alpine
 
 WORKDIR /app
 

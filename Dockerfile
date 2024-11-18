@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN chmod +x mvnw
+
 EXPOSE 8080
 
-CMD [ "mvnw", "spring-boot:run" ]
+CMD [ "./mvnw", "spring-boot:run" ]

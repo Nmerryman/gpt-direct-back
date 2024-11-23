@@ -24,8 +24,6 @@ public class GptdirectApplication {
     // }
     
     @PostMapping("/api/ping")
-    // @CrossOrigin(origins = "http://localhost:3000")
-    @CrossOrigin(origins = "*")
     public PingMessage ping(@RequestBody PingMessage msg) {
         return msg;
     }

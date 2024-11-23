@@ -77,7 +77,6 @@ final public class AuthController {
     }
 
     @PostMapping("/api/auth")
-//    @CrossOrigin(origins = "*")
     public AuthResponse getAuthResponse(@RequestBody AuthRequest authRequest) throws NoSuchAlgorithmException {
 
         return new AuthResponse(generateAuthToken(authRequest.password()));
@@ -85,7 +84,6 @@ final public class AuthController {
     }
 
 //    @PostMapping("/api/authtest")
-//    @CrossOrigin(origins = "*")
 //    public PingMessage testAuth()
 
 }

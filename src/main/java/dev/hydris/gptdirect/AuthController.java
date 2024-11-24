@@ -3,6 +3,7 @@ package dev.hydris.gptdirect;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.MessageDigest;
@@ -83,8 +84,16 @@ final public class AuthController {
 
     }
 
-//    @PostMapping("/api/authtest")
-//    public PingMessage testAuth()
+    @PostMapping("/api/authtest")
+    public PingMessage testAuth(@CookieValue(value = "auth", defaultValue = "") String auth) {
+        boolean passes = validateAuthToken(auth);
+
+        if (passes) {
+            return new PingMessage("Auth is valid!");
+        } else {
+            return new PingMessage("Auth is not valid.");
+        }
+    }
 
 }
 

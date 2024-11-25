@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -19,8 +20,9 @@ final public class AuthController {
 
     private final String passHash;
     private ArrayList<String> validAuthTokens;
+    private final GptController gptController;
 
-    public AuthController() throws NoSuchAlgorithmException {
+    public AuthController() throws NoSuchAlgorithmException, IOException {
         // FIXME! Yes this is bad. 
         String password = "pass";
         validAuthTokens = new ArrayList<String>();
@@ -28,6 +30,8 @@ final public class AuthController {
         MessageDigest messagedigest = MessageDigest.getInstance("SHA-256");
         messagedigest.update(password.getBytes());
         passHash = new String(messagedigest.digest());
+
+        gptController = new GptController();
     }
 
 
@@ -93,6 +97,27 @@ final public class AuthController {
         } else {
             return new PingMessage("Auth is not valid.");
         }
+    }
+
+    @PostMapping("/api/request")
+    public GptResponse request(@RequestBody GptRequest gptrequest, @CookieValue(value = "auth", defaultValue = "") String auth) {
+
+        if (!validateAuthToken(auth)) {
+            return new GptResponse("Auth is not valid.");
+        }
+
+        // Just some defaults because why not
+        String systemPrompt = gptrequest.systemPrompt();
+        if (systemPrompt.isEmpty()) {
+            systemPrompt = "Speak as if you're a cat";
+        }
+
+        String userPrompt = gptrequest.userPrompt();
+        if (userPrompt.isEmpty()) {
+            userPrompt = "Give instructions on growing tomatoes.";
+        }
+
+        return new GptResponse(gptController.generate(systemPrompt, userPrompt));
     }
 
 }

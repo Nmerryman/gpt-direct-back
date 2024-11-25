@@ -2,10 +2,11 @@ FROM maven:3.9.9-eclipse-temurin-21-alpine
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-RUN chmod +x mvnw
+COPY . .
 
 EXPOSE 8080
 
-CMD [ "./mvnw", "spring-boot:run" ]
+CMD mvn "spring-boot:run"

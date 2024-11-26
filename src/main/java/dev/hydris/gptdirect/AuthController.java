@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -23,8 +26,7 @@ final public class AuthController {
     private final GptController gptController;
 
     public AuthController() throws NoSuchAlgorithmException, IOException {
-        // FIXME! Yes this is bad. 
-        String password = "pass";
+        String password = Files.readString(Paths.get("/run/secrets/login_key"), StandardCharsets.UTF_8).replaceAll("\\s+", "");
         validAuthTokens = new ArrayList<String>();
         
         MessageDigest messagedigest = MessageDigest.getInstance("SHA-256");

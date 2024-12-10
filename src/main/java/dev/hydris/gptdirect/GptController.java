@@ -27,7 +27,7 @@ public class GptController {
                 .build();
 
         ChatRequest chatRequest = ChatRequest.builder()
-                .model("gpt-4o-mini")
+                .model("gpt-4o")
                 .message(ChatMessage.SystemMessage.of(system))
                 .message(ChatMessage.UserMessage.of(user))
                 .temperature(0.1)
